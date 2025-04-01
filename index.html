@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Accessibility Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, button { padding: 10px; margin: 10px; }
+        pre { text-align: left; background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Automated UI/UX Accessibility Tester</h1>
+    <input type="text" id="url" placeholder="Enter Website URL">
+    <button onclick="analyzeWebsite()">Analyze</button>
+    <h2>Report</h2>
+    <pre id="report">Results will be displayed here...</pre>
+
+    <script>
+        async function analyzeWebsite() {
+            const url = document.getElementById('url').value;
+            if (!url) {
+                alert("Please enter a valid URL");
+                return;
+            }
+
+            document.getElementById('report').innerText = "Analyzing... Please wait...";
+
+            try {
+                const response = await fetch("http://localhost:3000/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+                document.getElementById('report').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('report').innerText = "❌ Error fetching analysis. Make sure the backend is running.";
+            }
+        }
+    </script>
+</body>
+</html>
