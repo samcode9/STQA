@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UI/UX Accessibility Tester</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, button { padding: 10px; margin: 10px; }
-        pre { text-align: left; background: #f4f4f4; padding: 10px; }
-    </style>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1>Automated UI/UX Accessibility Tester</h1>
-    <input type="text" id="url" placeholder="Enter Website URL">
-    <button onclick="analyzeWebsite()">Analyze</button>
-    <h2>Report</h2>
-    <pre id="report">Results will be displayed here...</pre>
-
+    <header class="head">
+        <h1>Automated UI/UX Accessibility Tester</h1>
+    </header>
+    <div class="userinput">
+        <input type="text" id="url" placeholder="Enter Website URL">
+        <button onclick="analyzeWebsite()">Analyze</button>
+    </div>
+    
+        <h2 id="wtxt">Report</h2>
+        <pre id="report">Results will be displayed here...</pre>
+    
+    
     <script>
         async function analyzeWebsite() {
             const url = document.getElementById('url').value;
