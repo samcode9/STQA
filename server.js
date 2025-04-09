@@ -39,17 +39,49 @@ async function analyzeWebsite(url) {
       });
     });
 
-    // 2. Contrast Issues: Flag elements (p, span, div) where text color equals background color.
-    document.querySelectorAll("p, span, div").forEach((el) => {
-      let color = window.getComputedStyle(el).color;
-      let bgColor = window.getComputedStyle(el).backgroundColor;
-      if (color === bgColor) {
-        report.contrastIssues.push({
-          element: el.innerText.trim(),
-          issue: "⚠️ Low contrast detected",
+        // 2. Contrast Issues: Check contrast ratio between text color and background color.
+        function getLuminance(r, g, b) {
+          const a = [r, g, b].map((v) => {
+            v /= 255;
+            return v <= 0.03928
+              ? v / 12.92
+              : Math.pow((v + 0.055) / 1.055, 2.4);
+          });
+          return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2];
+        }
+    
+        function getContrastRatio(fg, bg) {
+          const [r1, g1, b1] = fg;
+          const [r2, g2, b2] = bg;
+          const L1 = getLuminance(r1, g1, b1);
+          const L2 = getLuminance(r2, g2, b2);
+          const lighter = Math.max(L1, L2);
+          const darker = Math.min(L1, L2);
+          return (lighter + 0.05) / (darker + 0.05);
+        }
+    
+        function parseRGB(rgbString) {
+          const match = rgbString.match(/\d+/g);
+          return match ? match.map(Number) : [0, 0, 0];
+        }
+    
+        document.querySelectorAll("p, span, div").forEach((el) => {
+          const color = window.getComputedStyle(el).color;
+          const bgColor = window.getComputedStyle(el).backgroundColor;
+    
+          const fgRGB = parseRGB(color);
+          const bgRGB = parseRGB(bgColor);
+    
+          const ratio = getContrastRatio(fgRGB, bgRGB);
+          if (ratio < 4.5) {
+            report.contrastIssues.push({
+              element: el.innerText.trim().substring(0, 100), // prevent too much text
+              contrastRatio: ratio.toFixed(2),
+              issue: "⚠️ Contrast ratio too low (needs at least 4.5:1)",
+            });
+          }
         });
-      }
-    });
+    
 
     // 3. Keyboard Accessibility / Focus Management:
     // Check all interactive elements for a visible focus indicator.
@@ -86,24 +118,16 @@ async function analyzeWebsite(url) {
     // 5. Semantic Markup:
     // Check if key semantic sections are present.
     if (!document.querySelector("header, [role='banner']")) {
-      report.semanticIssues.push(
-        "❌ Missing <header> or element with role='banner'"
-      );
+      report.semanticIssues.push("❌ Missing <header> or element with role='banner'");
     }
     if (!document.querySelector("nav, [role='navigation']")) {
-      report.semanticIssues.push(
-        "❌ Missing <nav> or element with role='navigation'"
-      );
+      report.semanticIssues.push("❌ Missing <nav> or element with role='navigation'");
     }
     if (!document.querySelector("main, [role='main']")) {
-      report.semanticIssues.push(
-        "❌ Missing <main> or element with role='main'"
-      );
+      report.semanticIssues.push("❌ Missing <main> or element with role='main'");
     }
     if (!document.querySelector("footer, [role='contentinfo']")) {
-      report.semanticIssues.push(
-        "❌ Missing <footer> or element with role='contentinfo'"
-      );
+      report.semanticIssues.push("❌ Missing <footer> or element with role='contentinfo'");
     }
 
     return report;

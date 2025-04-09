@@ -5,6 +5,6 @@ It helps designers and developers validate their interfaces with real user feedb
 ## 🛠️ Tech Stack
 
 - 🖥️ **Frontend**: HTML5 / CSS3 / JS
-- ⚙️ **Backend** (optional): Node.js / Express
+- ⚙️ **Backend**: Node.js / Express
 - 📦 **Package Manager**: npm
 - 🗃️ **Version Control**: Git + GitHub
