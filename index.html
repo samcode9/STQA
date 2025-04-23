@@ -17,9 +17,12 @@
     
         <h2 id="wtxt">Report</h2>
         <pre id="report">Results will be displayed here...</pre>
-    
+        <button onclick="logout()">Logout</button>
     
     <script>
+        if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
         async function analyzeWebsite() {
             const url = document.getElementById('url').value;
             if (!url) {
@@ -42,6 +45,10 @@
                 document.getElementById('report').innerText = "❌ Error fetching analysis. Make sure the backend is running.";
             }
         }
+        function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "home.html";
+  }
     </script>
 </body>
 </html>
