@@ -14,11 +14,10 @@ const puppeteer = require("puppeteer");
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/accessibilityChecker', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect('mongodb+srv://uiuxadmin:uiuxpassword@userdatacluster.urai5s4.mongodb.net/?retryWrites=true&w=majority&appName=UserdataCluster', {
+
 })
-.then(() => console.log('Connected to MongoDB'))
+.then(() => console.log('✅ Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
 const bcrypt = require('bcrypt');
