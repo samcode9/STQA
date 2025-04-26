@@ -14,7 +14,7 @@ const puppeteer = require("puppeteer");
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://uiuxadmin:uiuxpassword@userdatacluster.urai5s4.mongodb.net/?retryWrites=true&w=majority&appName=UserdataCluster', {
+mongoose.connect('mongodb+srv://uiuxadmin:uiuxpassword@userdatacluster.urai5s4.mongodb.net/UIUXTester', {
 
 })
 .then(() => console.log('✅ Connected to MongoDB'))
