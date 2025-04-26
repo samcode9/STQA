@@ -18,7 +18,7 @@ mongoose.connect('mongodb+srv://uiuxadmin:uiuxpassword@userdatacluster.urai5s4.m
 
 })
 .then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.catch(err => console.error('✅MongoDB connection error:', err));
 
 const bcrypt = require('bcrypt');
 const User = require('./models/User');  // Import the User model
