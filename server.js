@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); 
 
 // Add this line to allow requests from all origins
 app.use(cors());
@@ -14,9 +15,7 @@ const puppeteer = require("puppeteer");
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://uiuxadmin:uiuxpassword@userdatacluster.urai5s4.mongodb.net/UIUXTester', {
-
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('✅ Connected to MongoDB'))
 .catch(err => console.error('✅MongoDB connection error:', err));
 
