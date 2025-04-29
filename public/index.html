@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Accessibility Tester</title>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <header class="head">
+        <h1>Automated UI/UX Accessibility Tester</h1>
+    </header>
+    <div class="userinput">
+        <input type="text" id="url" placeholder="Enter Website URL">
+        <button onclick="analyzeWebsite()">Analyze</button>
+    </div>
+    
+        <h2 id="wtxt">Report</h2>
+        <pre id="report">Results will be displayed here...</pre>
+        <button onclick="logout()">Logout</button>
+    
+    <script>
+        if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+        async function analyzeWebsite() {
+            const url = document.getElementById('url').value;
+            if (!url) {
+                alert("Please enter a valid URL");
+                return;
+            }
+
+            document.getElementById('report').innerText = "Analyzing... Please wait...";
+
+            try {
+                const response = await fetch("http://localhost:3000/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+                document.getElementById('report').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('report').innerText = "❌ Error fetching analysis. Make sure the backend is running.";
+            }
+        }
+        function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "home.html";
+  }
+    </script>
+</body>
+</html>
