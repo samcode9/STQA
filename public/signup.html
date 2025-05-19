@@ -61,7 +61,7 @@
 <body>
   <div class="signup-box">
     <h2>Sign Up</h2>
-    <input type="email" id="email" placeholder="Enter your email" required />
+    <input type="email" id="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"  placeholder="Enter your email" required />
     <input type="password" id="password" placeholder="Enter your password" required />
     <button onclick="signUp()">Sign Up</button>
     <p>Already have an account? <a href="login.html">Login here</a></p>
@@ -72,6 +72,20 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
+
+      const allowedDomains = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com"]; // Add allowed domains here
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  const emailDomain = email.split("@")[1];
+  if (!allowedDomains.includes(emailDomain)) {
+    alert("Only emails with these domains are allowed: " + allowedDomains.join(", "));
+    return;
+  }
       // Create a payload to send to the backend
       const data = {
         email: email,
