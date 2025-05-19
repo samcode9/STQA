@@ -8,3 +8,5 @@ It helps designers and developers validate their interfaces with real user feedb
 - ⚙️ **Backend**: Node.js / Express
 - 📦 **Package Manager**: npm
 - 🗃️ **Version Control**: Git + GitHub
+
+for running the backend you have to enter the promt node server.js
