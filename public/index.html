@@ -20,9 +20,17 @@
       <!-- Report will be injected here -->
       <pre id="report">Results will be displayed here...</pre>
     </div>
+    <button onclick="fetchFixedAndDisplay()">View Remediated Version</button>
+    <div class="download-buttons">
+    <button id="viewCombinedBtn">View Combined HTML + CSS</button>
+</div>
+  </div>
     <button onclick="logout()">Logout</button>
     
     <script>
+
+    
+
       if (localStorage.getItem("loggedIn") !== "true") {
         window.location.href = "login.html";
       }
@@ -43,7 +51,6 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url, format: "html" })  // request HTML report
           });
-    
           const contentType = response.headers.get('Content-Type');
     
           if (contentType.includes('text/html')) {
@@ -56,16 +63,61 @@
             const data = await response.json();
             document.getElementById('report').innerText = JSON.stringify(data, null, 2);
           }
+            
+            if (Array.isArray(data.findings)) {
+              const container = document.getElementById('report-container');
+              container.innerHTML = `<table>… build rows from data.findings …</table>`;
+            } else {
+              document.getElementById('report').innerText = "No findings returned.";
+            }
+        
         } catch (error) {
           document.getElementById('report').innerText = "❌ Error fetching analysis. Make sure the backend is running.";
           console.error(error);
         }
       }
-    
+
+      async function fetchFixedAndDisplay() {
+      try {
+        const response = await fetch('http://localhost:3000/fix');
+        const fixedHtml = await response.text();
+
+      // Open in new tab
+      const newTab = window.open('', '_blank');
+      newTab.document.open();
+      newTab.document.write(fixedHtml);
+      newTab.document.close();
+
+      } catch (err) {
+      console.error("Error displaying fixed HTML:", err);
+      alert("Could not display fixed version.");
+        }
+      }
+
+      //View the html and css in new tab
+       document.getElementById("viewFixedBtn").addEventListener("click", async () => {
+    try {
+      // 1) Fetch the fixed HTML
+      const res = await fetch("http://localhost:3000/fixed");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const fixedHtml = await res.text();
+
+      // 2) Open a new tab and write the HTML there
+      const w = window.open("", "_blank");
+      w.document.open();
+      w.document.write(fixedHtml);
+      w.document.close();
+    } catch (err) {
+      console.error("Failed to load fixed page:", err);
+      alert("Could not load the remediated version. Check console for details.");
+    }
+  });
+
       function logout() {
         localStorage.removeItem("loggedIn");
         window.location.href = "home.html";
       }
+
     </script>
 </body>
 </html>
