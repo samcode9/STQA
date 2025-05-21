@@ -5,7 +5,8 @@
   <title>Accessibility Audit Report</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }
-    h1, h2, h3 { color: #003366; }
+    h1, h2 { color: #f8f8f8; }
+    h3 { color: #bababa; font-size: small; }
     table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
     th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
     th { background: #f0f0f0; }
@@ -18,23 +19,31 @@
 <body>
   <h1>Accessibility Audit Report</h1>
   <h2>Executive Summary</h2>
-  <p><%= summary %></p>
+  <h3><%= summary %></h3>
 
   <h2>Findings & Detailed Results</h2>
   <table>
     <thead>
       <tr>
-        <th>Criterion</th><th>Severity</th><th>Details</th><th>Recommendation</th>
+        <th>Criterion</th>
+        <th>Severity</th>
+        <th>Details</th>
+        <th>Line Number</th>
+        <th>Content</th>
+        <th>Recommendation</th>
       </tr>
     </thead>
     <tbody>
     <% findings.forEach(f => { %>
       <tr class="severity-<%= f.severity %>">
-        <td><%= f.criterion %></td>
-        <td><%= f.severity.charAt(0).toUpperCase() + f.severity.slice(1) %></td>
-        <td><%= f.details %></td>
-        <td class="recommendation"><%= f.recommendation %></td>
-      </tr>
+  <td><%= f.criterion %></td>
+  <td><%= f.severity.charAt(0).toUpperCase() + f.severity.slice(1) %></td>
+  <td><%= f.details %></td>
+  <td><%= f.lineNumber || 'N/A' %></td>
+  <td><code><%= f.content || 'N/A' %></code></td>
+  <td class="recommendation"><%= f.recommendation %></td>
+</tr>
+
     <% }) %>
     </tbody>
   </table>
